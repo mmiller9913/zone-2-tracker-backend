@@ -14,19 +14,19 @@ app.use(express.json()); //converts every request body to JSON
 // app.use(express.urlencoded())
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const db = mysql.createConnection({
-    // local
-    // host: 'localhost',
-    // user: 'root',
-    // password: process.env.MYSQL_PASSWORD_LOCAL,
-    // database: 'zone_2_tracker',
+// const db = mysql.createConnection({
+//     // local
+//     // host: 'localhost',
+//     // user: 'root',
+//     // password: process.env.MYSQL_PASSWORD_LOCAL,
+//     // database: 'zone_2_tracker',
 
-    //heroku
-    host: 'us-cdbr-east-05.cleardb.net',
-    user: 'b5e8c7635e0a90',
-    password: process.env.MYSQL_PASSWORD_HEROKU,
-    database: 'heroku_49aaaee3ed47db2',
-});
+//     //heroku
+//     host: 'us-cdbr-east-05.cleardb.net',
+//     user: 'b5e8c7635e0a90',
+//     password: process.env.MYSQL_PASSWORD_HEROKU,
+//     database: 'heroku_49aaaee3ed47db2',
+// });
 
 // db.connect((err) => {
 //     if (err) {
@@ -36,16 +36,43 @@ const db = mysql.createConnection({
 //     }
 // });
 
-// let db;
-// async function connectToDatabase() {
-//     try {
-//     db = await connectToDb.connectToDb();
-//     } catch (err) {
-//         console.log('Error connecting to databse');
-//     }
-//   }
-  
-// connectToDatabase();
+//logic for below is here: https://stackoverflow.com/questions/20210522/nodejs-mysql-error-connection-lost-the-server-closed-the-connection
+let db;
+function connectToDatabase() {
+    db = mysql.createConnection({
+        // local
+        // host: 'localhost',
+        // user: 'root',
+        // password: process.env.MYSQL_PASSWORD_LOCAL,
+        // database: 'zone_2_tracker',
+
+        //heroku
+        host: 'us-cdbr-east-05.cleardb.net',
+        user: 'b5e8c7635e0a90',
+        password: process.env.MYSQL_PASSWORD_HEROKU,
+        database: 'heroku_49aaaee3ed47db2',
+    });
+
+    // db.connect((err) => {
+    //     if (err) {
+    //         console.log('Error connecting to database:', err); 
+    //         setTimeout(connectToDatabase, 2000); //delay before attempting to reconnect to avoid a 'hot loop'
+    //     } else {
+    //         console.log('mySQL connected');
+    //     }
+    // });
+
+    db.on('error', function(err) {
+        console.log('db error:', err);
+        if(err.code === 'PROTOCOL_CONNECTION_LOST') {
+            connectToDatabase();
+        } else {
+            throw err;
+        }
+    })
+}
+
+connectToDatabase();
 
 //log minutes to database
 app.post('/api/logminutes', async (req, res) => {
@@ -166,4 +193,9 @@ const server = app.listen(app.get('port'), () => {
 
 //notes
 //database stores created_at timestamp in est
-//when get data from database on frontend, created_at is +4 hours 
+//when get data from database on frontend, created_at is +4 hours
+
+
+//to look into:
+//https://stackoverflow.com/questions/20210522/nodejs-mysql-error-connection-lost-the-server-closed-the-connection
+//error: heroku Error: Connection lost: The server closed the connection.
