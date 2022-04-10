@@ -15,10 +15,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const db = mysql.createConnection({
     // local
-    host: 'localhost',
-    user: 'root',
+    // host: 'localhost',
+    // user: 'root',
+    // password: process.env.MYSQL_PASSWORD_LOCAL,
+    // database: 'zone_2_tracker',
+
+    //heroku
+    host: 'us-cdbr-east-05.cleardb.net',
+    user: 'b5e8c7635e0a90',
     password: process.env.MYSQL_PASSWORD_LOCAL,
-    database: 'zone_2_tracker',
+    database: 'heroku_49aaaee3ed47db2',
 });
 
 //log minutes to database
@@ -111,10 +117,12 @@ app.post('/api/deletesession', (req, res) => {
     })
 })
 
+//when testing
 // app.listen('5000', () => {
 //     console.log('Server started on port 5000')
-// }) comm
+// }) 
 
+//when deploed to heroku
 app.set('port', process.env.PORT || 5000);
 const server = app.listen(app.get('port'), () => {
     console.log(`App started: Express running → PORT ${server.address().port}`);
