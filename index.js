@@ -27,6 +27,14 @@ const db = mysql.createConnection({
     database: 'heroku_49aaaee3ed47db2',
 });
 
+db.connect((err) => {
+    if (err) {
+        console.log('Error connecting to database');
+    } else {
+        console.log('mySQL connected');
+    }
+});
+
 //log minutes to database
 app.post('/api/logminutes', async (req, res) => {
     const email = req.body.account;
@@ -138,8 +146,6 @@ app.set('port', process.env.PORT || 5000);
 const server = app.listen(app.get('port'), () => {
     console.log(`App started: Express running → PORT ${server.address().port}`);
 });
-
-
 
 
 //great tutorial for using react with node
