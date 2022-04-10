@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors'); //needed to prevent network error 
 const app = express();
-// const mysql = require('mysql');
+const mysql = require('mysql');
 const dateFunctions = require('./helper_functions/dateFunctions');
 // const connectToDb = require('./connectToDb.js');
 
