@@ -111,9 +111,16 @@ app.post('/api/deletesession', (req, res) => {
     })
 })
 
-app.listen('5000', () => {
-    console.log('Server started on port 5000')
-})
+// app.listen('5000', () => {
+//     console.log('Server started on port 5000')
+// }) comm
+
+app.set('port', process.env.PORT || 5000);
+const server = app.listen(app.get('port'), () => {
+    console.log(`App started: Express running → PORT ${server.address().port}`);
+});
+
+
 
 
 //great tutorial for using react with node
