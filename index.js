@@ -14,19 +14,19 @@ app.use(express.json()); //converts every request body to JSON
 // app.use(express.urlencoded())
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// const db = mysql.createConnection({
-//     // local
-//     // host: 'localhost',
-//     // user: 'root',
-//     // password: process.env.MYSQL_PASSWORD_LOCAL,
-//     // database: 'zone_2_tracker',
+const db = mysql.createConnection({
+    // local
+    // host: 'localhost',
+    // user: 'root',
+    // password: process.env.MYSQL_PASSWORD_LOCAL,
+    // database: 'zone_2_tracker',
 
-//     //heroku
-//     host: 'us-cdbr-east-05.cleardb.net',
-//     user: 'b5e8c7635e0a90',
-//     password: process.env.MYSQL_PASSWORD_HEROKU,
-//     database: 'heroku_49aaaee3ed47db2',
-// });
+    //heroku
+    host: 'us-cdbr-east-05.cleardb.net',
+    user: 'b5e8c7635e0a90',
+    password: process.env.MYSQL_PASSWORD_HEROKU,
+    database: 'heroku_49aaaee3ed47db2',
+});
 
 // db.connect((err) => {
 //     if (err) {
@@ -36,16 +36,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //     }
 // });
 
-let db;
-async function connectToDatabase() {
-    try {
-    db = await connectToDb.connectToDb();
-    } catch (err) {
-        console.log('Error connecting to databse');
-    }
-  }
+// let db;
+// async function connectToDatabase() {
+//     try {
+//     db = await connectToDb.connectToDb();
+//     } catch (err) {
+//         console.log('Error connecting to databse');
+//     }
+//   }
   
-connectToDatabase();
+// connectToDatabase();
 
 //log minutes to database
 app.post('/api/logminutes', async (req, res) => {
