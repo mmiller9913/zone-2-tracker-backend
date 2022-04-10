@@ -3,8 +3,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors'); //needed to prevent network error 
 const app = express();
-const mysql = require('mysql');
+// const mysql = require('mysql');
 const dateFunctions = require('./helper_functions/dateFunctions');
+const connectToDb = require('./connectToDb.js');
 
 //MIDDLEWARE 
 app.use(cors());  //needed to prevent network error 
@@ -13,27 +14,38 @@ app.use(express.json()); //converts every request body to JSON
 // app.use(express.urlencoded())
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const db = mysql.createConnection({
-    // local
-    // host: 'localhost',
-    // user: 'root',
-    // password: process.env.MYSQL_PASSWORD_LOCAL,
-    // database: 'zone_2_tracker',
+// const db = mysql.createConnection({
+//     // local
+//     // host: 'localhost',
+//     // user: 'root',
+//     // password: process.env.MYSQL_PASSWORD_LOCAL,
+//     // database: 'zone_2_tracker',
 
-    //heroku
-    host: 'us-cdbr-east-05.cleardb.net',
-    user: 'b5e8c7635e0a90',
-    password: process.env.MYSQL_PASSWORD_LOCAL,
-    database: 'heroku_49aaaee3ed47db2',
-});
+//     //heroku
+//     host: 'us-cdbr-east-05.cleardb.net',
+//     user: 'b5e8c7635e0a90',
+//     password: process.env.MYSQL_PASSWORD_LOCAL,
+//     database: 'heroku_49aaaee3ed47db2',
+// });
 
-db.connect((err) => {
-    if (err) {
-        console.log('Error connecting to database');
-    } else {
-        console.log('mySQL connected');
+// db.connect((err) => {
+//     if (err) {
+//         console.log('Error connecting to database');
+//     } else {
+//         console.log('mySQL connected');
+//     }
+// });
+
+let db;
+async function connectToDatabase() {
+    try {
+    db = await connectToDb.connectToDb();
+    } catch (err) {
+        console.log('Error connecting to databse');
     }
-});
+  }
+  
+connectToDatabase();
 
 //log minutes to database
 app.post('/api/logminutes', async (req, res) => {
