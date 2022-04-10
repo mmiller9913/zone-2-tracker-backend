@@ -3,9 +3,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors'); //needed to prevent network error 
 const app = express();
-// const mysql = require('mysql');
+const mysql = require('mysql');
 const dateFunctions = require('./helper_functions/dateFunctions');
-const connectToDb = require('./connectToDb.js');
+// const connectToDb = require('./connectToDb.js');
 
 //MIDDLEWARE 
 app.use(cors());  //needed to prevent network error 
@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //     //heroku
 //     host: 'us-cdbr-east-05.cleardb.net',
 //     user: 'b5e8c7635e0a90',
-//     password: process.env.MYSQL_PASSWORD_LOCAL,
+//     password: process.env.MYSQL_PASSWORD_HEROKU,
 //     database: 'heroku_49aaaee3ed47db2',
 // });
 
