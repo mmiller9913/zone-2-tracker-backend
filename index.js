@@ -66,6 +66,17 @@ app.get('/api/get/users/:email', (req, res) => {
     })
 })
 
+//get all users 
+app.get('/api/get/users', (req, res) => {
+    const sql = `SELECT * FROM users`;
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+        }
+        res.send(result);
+    })
+})
+
 //sum of weekly zone 2 minutes
 const lastSunday = dateFunctions.getLastDayOccurence(new Date(), 'Sun'); //this is a date object in GMT time
 const formattedLastSunday = lastSunday.toISOString().split('T')[0]; //converts to YYYY-MM-DD format
